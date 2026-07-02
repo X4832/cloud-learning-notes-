@@ -1,6 +1,4 @@
-# Day 1: 部署第一个云服务器
-
-- 创建阿里云 ECS (CentOS 7.9, 2核2G)
-- 安装并启动 Nginx
-- 部署自定义网页: Hello! My first cloud server!
-- 公网IP: 121.43.40.214
+# 总计划
+HCIA + HCIP
+Python 云自动化入门
+云上企业网络架构 + Zabbix监控平台
