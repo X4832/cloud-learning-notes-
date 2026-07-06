@@ -24,7 +24,7 @@
 - ✅ 创建 NAT 网关（小型）
 - ✅ 绑定 EIP 到 NAT 网关
 - ✅ 配置 SNAT 条目（应用子网、数据库子网）
-- ⏳ 内网ECS验证（待补充第二台ECS）
+- ⏳ 内网ECS验证
 
 ### NAT 网关（Network Address Translation Gateway）
 NAT网关：是阿里云提供的一种企业级公网网关服务，用于实现 VPC 内的云资源通过共享公网 IP 访问互联网，或者向互联网提供服务。
