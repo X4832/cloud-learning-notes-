@@ -123,7 +123,7 @@
 
 ---
 
-## 🏗️ 已搭建的云上架构                                
+## 🏗️ 已搭建的云上架构      
 ```mermaid
 flowchart TD
     %% 外网访问主线（实线）
@@ -153,7 +153,7 @@ flowchart TD
     AppSub -.-> NAT
     NAT --> Internet["互联网<br/>服务器下载/调用第三方接口"]
 
-    %% 样式区分层级，渲染更美观
+    %% 样式定义（修正语法 classDef 无空格）
     classDef outer fill:#eef7ff,stroke:#2b7bcd,stroke-width:1.5
     classDef vpcBox fill:#f7f7f7,stroke:#333,stroke-width:1.5
     class User,EIP,Internet outer
