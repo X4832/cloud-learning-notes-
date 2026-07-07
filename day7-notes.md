@@ -124,14 +124,13 @@
 ---
 
 ## 🏗️ 已搭建的云上架构      
+## 🏗️ 已搭建的云上架构
 ```mermaid
 flowchart TD
-    %% 外网访问主线（实线）
     User["外网用户"] --> EIP["EIP 公网IP"]
     EIP --> SLB["SLB 负载均衡<br/>部署子网10.0.1.0/24"]
     SLB --> PubSub["公网子网 10.0.1.0/24"]
 
-    %% VPC内网容器
     subgraph VPC["VPC：我的-VPC 网段10.0.0.0/16"]
         PubSub
         AppSub["应用子网 10.0.2.0/24<br/>(无公网IP，安全隔离)"]
@@ -142,22 +141,14 @@ flowchart TD
         NAT["NAT网关 SNAT"]
     end
 
-    %% 业务内网访问链路
     PubSub --> AppSub
     AppSub --> Web
     AppSub --> App
     AppSub --> DBSub
     DBSub --> DB
 
-    %% 内网服务器出网分支（虚线区分流量）
     AppSub -.-> NAT
     NAT --> Internet["互联网<br/>服务器下载/调用第三方接口"]
-
-    %% 样式定义（修正语法 classDef 无空格）
-    classDef outer fill:#eef7ff,stroke:#2b7bcd,stroke-width:1.5
-    classDef vpcBox fill:#f7f7f7,stroke:#333,stroke-width:1.5
-    class User,EIP,Internet outer
-    class VPC vpcBox
 ---
 
 ## 🎯 本周成果
