@@ -125,32 +125,40 @@
 
 ## 🏗️ 已搭建的云上架构      
 flowchart TD
-    A[互联网用户] --> B[EIP 公网IP]
-    B --> C[SLB 负载均衡<br/>部署在公网子网]
+    A[🌐 互联网用户] --> B[📡 EIP 公网IP]
+    B --> C[⚖️ SLB 负载均衡<br/>部署在公网子网]
     
-    subgraph VPC[VPC: 我的-VPC<br/>10.0.0.0/16]
-        subgraph pub[公网子网 10.0.1.0/24]
+    subgraph VPC[☁️ VPC: 我的-VPC<br/>10.0.0.0/16]
+        direction TB
+        
+        subgraph pub[🔵 公网子网 10.0.1.0/24]
             C
         end
         
-        subgraph app[应用子网 10.0.2.0/24<br/>无公网IP]
-            D[ECS-Web Nginx]
-            E[ECS-App]
+        subgraph app[🟢 应用子网 10.0.2.0/24<br/>无公网IP]
+            D[🖥️ ECS-Web Nginx]
+            E[🖥️ ECS-App]
         end
         
-        subgraph db[数据库子网 10.0.3.0/24<br/>无公网IP]
-            F[(RDS 数据库)]
+        subgraph db[🔴 数据库子网 10.0.3.0/24<br/>无公网IP]
+            F[(💾 RDS 数据库)]
         end
         
         C --> D
         D --> E
         E --> F
         
-        E --> G[NAT 网关<br/>SNAT]
+        E --> G[🔌 NAT 网关<br/>SNAT]
         F --> G
     end
     
-    G --> H[互联网<br/>下载依赖 / 调用第三方接口]
+    G --> H[🌐 互联网<br/>下载依赖 / 调用第三方接口]
+    
+    style VPC fill:#f0f8ff,stroke:#4682b4
+    style pub fill:#e6f3ff,stroke:#4682b4
+    style app fill:#e6ffe6,stroke:#228b22
+    style db fill:#ffe6e6,stroke:#dc143c
+    style G fill:#fff0f5,stroke:#ba55d3
 ---
 
 ## 🎯 本周成果
