@@ -124,7 +124,7 @@
 ---
 
 ## 🏗️ 已搭建的云上架构                                
-                                                     flowchart TD
+                                  flowchart TD
     %% 外网入口链路
     User["外网用户"] --> EIP["EIP 公网IP"]
     EIP --> SLB["SLB 负载均衡<br/>部署子网10.0.1.0/24"]
@@ -149,12 +149,12 @@
     DBSub --> DB
 
     %% 内网出网独立分支（不与主线交叉）
-    AppSub --> NAT
+    AppSub -.-> NAT
     NAT --> Internet["互联网<br/>服务器下载/调用第三方接口"]
 
     %% 样式美化，区分层级
-    classDef outer fill:#f0f8ff,stroke:#333
-    classDef vpcBox fill:#f9f9f9,stroke:#111
+    classDef outer fill:#eef7ff,stroke:#2b7bcd,stroke-width:1.5px
+    class def vpcBox fill:#f6f6f6,stroke:#444,stroke-width:1.5px
     class User,EIP,Internet outer
     class VPC vpcBox
 ---
