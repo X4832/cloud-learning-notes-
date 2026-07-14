@@ -21,11 +21,6 @@
 - 能力方向：云网络架构设计、云上安全加固、高可用部署、运维监控、标准化项目落地
 
 ---
-## 📁 仓库目录结构（标准开源结构）
-```
-. ├── docs/ # 全套分步实操文档 │ ├── 01-Linux运维基础.md │ ├── 02-ECS基础Web部署.md │ ├── 03-VPC多子网架构&双层安全策略.md │ ├── 04-NAT网关SNAT统一出口.md │ ├── 05-ALB负载均衡高可用部署.md │ ├── 06-RDS内网数据库部署.md │ ├── 07-LNMP+WordPress业务部署.md │ └── 08-云监控告警运维配置.md ├── config/ # 项目配置文件与部署脚本 │ ├── nginx-default.conf │ ├── mysql-init.sql │ └── deploy.sh ├── screenshots/ # 全流程实操截图 ├── architecture/ # 架构图资源 │ └── architecture.md └── README.md # 项目总说明
-
-undefined
 
 ---
 ## 🏗 整体架构设计
@@ -72,6 +67,12 @@ undefined
 - 部署NAT网关实现业务ECS统一公网出口，通过ALB负载均衡实现多节点Web服务高可用，在内网隔离环境下部署RDS数据库，保障数据安全。
 - 完整落地LNMP+WordPress动态网站业务，配置全维度云监控告警体系，同时规范GitHub仓库结构、沉淀全套实操文档与部署脚本，实现项目可复现、可落地、可面试讲解。
 #### 核心关键词：VPC架构设计、云上网络安全、ALB高可用、NAT网关、内网隔离、云运维、项目工程化
+
+## 📁 仓库目录结构（标准开源结构）
+```
+. ├── docs/ # 全套分步实操文档 │ ├── 01-Linux运维基础.md │ ├── 02-ECS基础Web部署.md │ ├── 03-VPC多子网架构&双层安全策略.md │ ├── 04-NAT网关SNAT统一出口.md │ ├── 05-ALB负载均衡高可用部署.md │ ├── 06-RDS内网数据库部署.md │ ├── 07-LNMP+WordPress业务部署.md │ └── 08-云监控告警运维配置.md ├── config/ # 项目配置文件与部署脚本 │ ├── nginx-default.conf │ ├── mysql-init.sql │ └── deploy.sh ├── screenshots/ # 全流程实操截图 ├── architecture/ # 架构图资源 │ └── architecture.md └── README.md # 项目总说明
+
+undefined
 
 ### 架构流程图（可直接渲染）
 ```mermaid
