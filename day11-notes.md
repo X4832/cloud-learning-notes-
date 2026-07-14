@@ -1,5 +1,5 @@
 # 阿里云企业级VPC云上网络架构综合项目总结
-Aliyun Enterprise VPC Network Architecture Project
+##### Aliyun Enterprise VPC Network Architecture Project
 
 ### ✅ 多子网分层架构
 ### ✅ 双层安全防护 
@@ -47,31 +47,9 @@ Aliyun Enterprise VPC Network Architecture Project
 - 公共子网：部署 ALB、NAT 网关，承担流量接入与公网出口
 - Web业务子网：部署多台 ECS 业务节点，承载网站服务
 - 数据库子网：纯内网隔离 RDS，无任何公网暴露，保障数据安全
-### 架构流程图（可直接渲染）
-flowchart LR
-    Client[公网用户] --> ALB[ALB应用负载均衡]
-    subgraph 阿里云企业VPC
-        subgraph 公共子网
-            ALB
-            NAT[NAT网关 SNAT公网出口]
-        end
-        subgraph Web业务子网
-            ECS1[ECS Web节点1 LNMP]
-            ECS2[ECS Web节点2 LNMP]
-            ALB --> ECS1
-            ALB --> ECS2
-        end
-        subgraph 数据库子网（完全内网隔离）
-            RDS[RDS MySQL]
-        end
-        ECS1 --> RDS
-        ECS2 --> RDS
-        ECS1 --> NAT
-        ECS2 --> NAT
-    end
 
 ---
-## 🔐 核心项目亮点（面试高频亮点）
+## 🔐 核心项目亮点
 - 三层子网隔离架构：拆分接入层、应用层、数据层，杜绝单点网络混乱，符合企业云上安全规范
 - 双层安全防护体系：网络ACL（子网无状态粗粒度拦截） + 安全组（实例有状态精准放行），双重兜底安全策略
 - NAT网关统一公网出口：业务ECS无需绑定公网IP，规避服务器直接暴露公网的安全风险
@@ -108,3 +86,27 @@ flowchart LR
 - 部署NAT网关实现业务ECS统一公网出口，通过ALB负载均衡实现多节点Web服务高可用，在内网隔离环境下部署RDS数据库，保障数据安全。
 - 完整落地LNMP+WordPress动态网站业务，配置全维度云监控告警体系，同时规范GitHub仓库结构、沉淀全套实操文档与部署脚本，实现项目可复现、可落地、可面试讲解。
 #### 核心关键词：VPC架构设计、云上网络安全、ALB高可用、NAT网关、内网隔离、云运维、项目工程化
+
+### 架构流程图（可直接渲染）
+flowchart LR
+    Client[公网用户] --> ALB[ALB应用负载均衡]
+    subgraph 阿里云企业VPC
+        subgraph 公共子网
+            ALB
+            NAT[NAT网关 SNAT公网出口]
+        end
+        subgraph Web业务子网
+            ECS1[ECS Web节点1 LNMP]
+            ECS2[ECS Web节点2 LNMP]
+            ALB --> ECS1
+            ALB --> ECS2
+        end
+        subgraph 数据库子网（完全内网隔离）
+            RDS[RDS MySQL]
+        end
+        ECS1 --> RDS
+        ECS2 --> RDS
+        ECS1 --> NAT
+        ECS2 --> NAT
+    end
+
