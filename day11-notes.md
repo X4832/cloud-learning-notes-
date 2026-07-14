@@ -22,24 +22,10 @@
 
 ---
 ## 📁 仓库目录结构（标准开源结构）
-.
-├── docs/                # 全套分步实操文档
-│   ├── 01-Linux运维基础.md
-│   ├── 02-ECS基础Web部署.md
-│   ├── 03-VPC多子网架构&双层安全策略.md
-│   ├── 04-NAT网关SNAT统一出口.md
-│   ├── 05-ALB负载均衡高可用部署.md
-│   ├── 06-RDS内网数据库部署.md
-│   ├── 07-LNMP+WordPress业务部署.md
-│   └── 08-云监控告警运维配置.md
-├── config/              # 项目配置文件与部署脚本
-│   ├── nginx-default.conf
-│   ├── mysql-init.sql
-│   └── deploy.sh
-├── screenshots/         # 全流程实操截图
-├── architecture/        # 架构图资源
-│   └── architecture.md
-└── README.md            # 项目总说明
+```
+. ├── docs/ # 全套分步实操文档 │ ├── 01-Linux运维基础.md │ ├── 02-ECS基础Web部署.md │ ├── 03-VPC多子网架构&双层安全策略.md │ ├── 04-NAT网关SNAT统一出口.md │ ├── 05-ALB负载均衡高可用部署.md │ ├── 06-RDS内网数据库部署.md │ ├── 07-LNMP+WordPress业务部署.md │ └── 08-云监控告警运维配置.md ├── config/ # 项目配置文件与部署脚本 │ ├── nginx-default.conf │ ├── mysql-init.sql │ └── deploy.sh ├── screenshots/ # 全流程实操截图 ├── architecture/ # 架构图资源 │ └── architecture.md └── README.md # 项目总说明
+
+undefined
 
 ---
 ## 🏗 整体架构设计
@@ -89,24 +75,24 @@
 
 ### 架构流程图（可直接渲染）
 ```mermaid
-flowchart LR
-    Client\[公网用户\] --> ALB\[ALB应用负载均衡\]
-    subgraph 阿里云企业VPC
-        subgraph 公共子网
-            ALB
-            NAT\[NAT网关 SNAT公网出口\]
-        end
-        subgraph Web业务子网
-            ECS1\[ECS Web节点1 LNMP\]
-            ECS2\[ECS Web节点2 LNMP\]
-            ALB --> ECS1
-            ALB --> ECS2
-        end
-        subgraph 数据库子网（完全内网隔离）
-            RDS\[RDS MySQL\]
-        end
-        ECS1 --> RDS
-        ECS2 --> RDS
-        ECS1 --> NAT
-        ECS2 --> NAT
+
+subgraph 阿里云企业VPC
+    subgraph 公共子网
+        ALB
+        NAT[NAT网关 SNAT公网出口]
     end
+    subgraph Web业务子网
+        ECS1[ECS Web节点1 LNMP]
+        ECS2[ECS Web节点2 LNMP]
+        ALB --> ECS1
+        ALB --> ECS2
+    end
+ subgraph 数据库子网（完全内网隔离）
+        RDS[RDS MySQL]
+    end
+ ECS1 --> RDS
+    ECS2 --> RDS
+    ECS1 --> NAT
+    ECS2 --> NAT
+end
+undefined
