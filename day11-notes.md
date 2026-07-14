@@ -88,25 +88,25 @@
 #### 核心关键词：VPC架构设计、云上网络安全、ALB高可用、NAT网关、内网隔离、云运维、项目工程化
 
 ### 架构流程图（可直接渲染）
+```mermaid
 flowchart LR
-    Client[公网用户] --> ALB[ALB应用负载均衡]
+    Client\[公网用户\] --> ALB\[ALB应用负载均衡\]
     subgraph 阿里云企业VPC
         subgraph 公共子网
             ALB
-            NAT[NAT网关 SNAT公网出口]
+            NAT\[NAT网关 SNAT公网出口\]
         end
         subgraph Web业务子网
-            ECS1[ECS Web节点1 LNMP]
-            ECS2[ECS Web节点2 LNMP]
+            ECS1\[ECS Web节点1 LNMP\]
+            ECS2\[ECS Web节点2 LNMP\]
             ALB --> ECS1
             ALB --> ECS2
         end
         subgraph 数据库子网（完全内网隔离）
-            RDS[RDS MySQL]
+            RDS\[RDS MySQL\]
         end
         ECS1 --> RDS
         ECS2 --> RDS
         ECS1 --> NAT
         ECS2 --> NAT
     end
-
