@@ -26,7 +26,8 @@ Python 云自动化入门
 
 ---
 
-## ☁️ 使用阿里云产品
+## 使用阿里云产品
+
 VPC、子网、安全组、网络ACL、ECS、SLB负载均衡、RDS MariaDB、OSS对象存储、NAT网关、云监控
 
 ---
@@ -37,15 +38,16 @@ VPC、子网、安全组、网络ACL、ECS、SLB负载均衡、RDS MariaDB、OSS
 |------|----------|------|
 | 计算层 | 阿里云 ECS | CentOS 7.9, LNMP 环境 |
 | 网络层 | VPC / 子网 / 安全组 / NACL | 三层隔离架构 |
-| 负载均衡 | ALB | 七层应用负载均衡 |
-| 数据库 | RDS MySQL | 内网隔离，白名单访问 |
+| 负载均衡 | SLB | 七层应用负载均衡 |
+| 数据库 | RDS MariaDB | 内网隔离，白名单访问 |
 | 网关 | NAT 网关 | SNAT 统一公网出口 |
 | 业务 | WordPress | LNMP + WordPress 博客 |
 | 监控 | 云监控 + Zabbix | 双轨监控体系 |
 
 ---
 
-## ✅ 项目实现功能
+## 项目实现功能
+
 1. VPC多子网分层规划：公网子网、应用子网、数据库子网，实现业务网络隔离
 2. NAT网关SNAT配置：无公网IP私有ECS访问互联网
 3. 双层网络安全防护：安全组（实例级）+ 网络ACL（子网级）访问控制
@@ -62,68 +64,75 @@ VPC、子网、安全组、网络ACL、ECS、SLB负载均衡、RDS MariaDB、OSS
 
 本项目采用三层隔离式企业架构，完全遵循云上最小权限、分层隔离、安全兜底的生产规范：
 
-- **公共子网**：部署 ALB、NAT 网关，承担流量接入与公网出口
+- **公共子网**：部署 SLB、NAT 网关，承担流量接入与公网出口
 - **Web业务子网**：部署多台 ECS 业务节点，承载网站服务
 - **数据库子网**：纯内网隔离 RDS，无任何公网暴露，保障数据安全
 
-### 架构流程图
+### 架构流程图（简化版）
 
 ```mermaid
 flowchart LR
-    Client{公网用户} --> ALB[ALB应用负载均衡]
+    Client{公网用户} --> SLB[SLB负载均衡]
 
-    subgraph 阿里云企业VPC
-        subgraph 公共子网
-            ALB
-            NAT[NAT网关 SNAT公网出口]
+    subgraph VPC["阿里云企业VPC 10.0.0.0/16"]
+        subgraph Pub["公共子网 10.0.1.0/24"]
+            SLB
+            NAT["NAT网关 SNAT公网出口"]
         end
 
-        subgraph Web业务子网
-            ECS1[ECS Web节点1 LNMP]
-            ECS2[ECS Web节点2 LNMP]
-            ALB --> ECS1
-            ALB --> ECS2
+        subgraph Web["Web业务子网 10.0.2.0/24"]
+            ECS1["ECS Web节点1 LNMP"]
+            ECS2["ECS Web节点2 LNMP"]
         end
 
-        subgraph 数据库子网
-            RDS[(RDS MySQL)]
+        subgraph DB["数据库子网 10.0.3.0/24"]
+            RDS[("RDS MariaDB")]
         end
-
-        ECS1 --> RDS
-        ECS2 --> RDS
-        ECS1 --> NAT
-        ECS2 --> NAT
     end
-```
----
 
-## 🖼️ 架构图
-
-```mermaid
-flowchart LR
-    User[互联网用户] --> DNS[阿里云云解析DNS]
-    DNS --> SLB[公网SLB负载均衡<br/>443 HTTPS/80 HTTP监听]
-    subgraph VPC主网段 10.0.0.0/16
-        subgraph 公网子网 10.0.1.0/24
-        end
-        subgraph 应用子网 10.0.2.0/24
-            ECS1[ECS Web1<br/>Nginx+WordPress]
-            ECS2[ECS Web2<br/>Nginx+WordPress]
-        end
-        subgraph 数据库子网 10.0.3.0/24
-            RDS[RDS MariaDB高可用<br/>主备跨可用区]
-        end
-        NAT[NAT网关-SNAT<br/>私有ECS访问外网]
-    end
     SLB --> ECS1
     SLB --> ECS2
     ECS1 --> RDS
     ECS2 --> RDS
-    RDS --> OSS[阿里云OSS<br/>数据库定时备份归档]
-    ECS1 & ECS2 --> NAT
-    MONITOR[云监控] -.-> ECS1 & ECS2 & RDS
-    end
+    ECS1 --> NAT
+    ECS2 --> NAT
 ```
+
+### 架构流程图（完整版）
+
+```mermaid
+flowchart LR
+    User["互联网用户"] --> DNS["云解析DNS"]
+    DNS --> SLB["SLB负载均衡\n443/80监听"]
+
+    subgraph VPC["VPC主网段 10.0.0.0/16"]
+        subgraph Pub["公共子网 10.0.1.0/24"]
+            SLB
+            NAT["NAT网关 SNAT"]
+        end
+
+        subgraph Web["应用子网 10.0.2.0/24"]
+            ECS1["ECS Web1\nNginx+WordPress"]
+            ECS2["ECS Web2\nNginx+WordPress"]
+        end
+
+        subgraph DB["数据库子网 10.0.3.0/24"]
+            RDS["RDS MariaDB\n主备高可用"]
+        end
+    end
+
+    SLB --> ECS1
+    SLB --> ECS2
+    ECS1 --> RDS
+    ECS2 --> RDS
+    RDS --> OSS["OSS\n备份归档"]
+    ECS1 --> NAT
+    ECS2 --> NAT
+    MONITOR["云监控"] -.-> ECS1
+    MONITOR -.-> ECS2
+    MONITOR -.-> RDS
+```
+
 ---
 
 ## 核心项目亮点
@@ -131,10 +140,10 @@ flowchart LR
 - **三层子网隔离架构**：拆分接入层、应用层、数据层，杜绝单点网络混乱，符合企业云上安全规范
 - **双层安全防护体系**：网络ACL（子网无状态粗粒度拦截） + 安全组（实例有状态精准放行），双重兜底安全策略
 - **NAT网关统一公网出口**：业务ECS无需绑定公网IP，规避服务器直接暴露公网的安全风险
-- **ALB负载均衡高可用**：多ECS节点轮询分发，支持故障自动摘除，提升业务可用性
+- **SLB负载均衡高可用**：多ECS节点轮询分发，支持故障自动摘除，提升业务可用性
 - **数据库内网隔离**：RDS 完全私有子网部署，公网无法访问，仅业务ECS可内网通信
 - **全链路监控运维**：CPU、内存、磁盘、带宽、数据库指标监控 + 异常告警，形成完整运维闭环
-- **高可用部署**：ALB 负载均衡 + 多 ECS 节点
+- **高可用部署**：SLB 负载均衡 + 多 ECS 节点
 
 ---
 
@@ -146,7 +155,7 @@ flowchart LR
 4. 部署 NAT 网关 + SNAT 规则，统一服务器公网出口
 5. 多台 ECS 初始化，搭建 LNMP 运行环境
 6. 创建内网 RDS 数据库，完成数据库初始化
-7. 配置 ALB 负载均衡与后端服务器组
+7. 配置 SLB 负载均衡与后端服务器组
 8. 部署 WordPress 动态网站，完成业务连通
 9. 配置云监控指标、告警策略，实现运维可视化
 10. 整体收紧安全策略，完成生产级安全加固
@@ -163,12 +172,13 @@ flowchart LR
 
 ---
 
-实验踩坑汇总
-修改 SSH 端口前，必须提前在安全组放行新端口，防止远程连接丢失
-网络 ACL 默认双向拒绝，新建规则必须手动放行所需端口
-RDS 数据库必须配置白名单，否则 ECS 无法内网连接
-OSS 备份需要正确配置 ossutil 密钥与权限，否则上传失败
-SLB 后端需要配置健康检查，故障节点自动剔除
+## 实验踩坑汇总
+
+- 修改 SSH 端口前，必须提前在安全组放行新端口，防止远程连接丢失
+- 网络 ACL 默认双向拒绝，新建规则必须手动放行所需端口
+- RDS 数据库必须配置白名单，否则 ECS 无法内网连接
+- OSS 备份需要正确配置 ossutil 密钥与权限，否则上传失败
+- SLB 后端需要配置健康检查，故障节点自动剔除
 
 ---
 
@@ -178,7 +188,7 @@ SLB 后端需要配置健康检查，故障节点自动剔除
 
 - 独立设计并搭建企业级云上VPC网络架构，采用公共、业务、数据库三层子网隔离方案，规避传统单子网权限泛滥风险，输出标准化架构图与完整开源项目文档。
 - 搭建网络ACL+安全组双层安全防护体系，基于最小权限原则收紧子网与实例双向流量策略，完成云上安全加固。
-- 部署NAT网关实现业务ECS统一公网出口，通过ALB负载均衡实现多节点Web服务高可用，在内网隔离环境下部署RDS数据库，保障数据安全。
+- 部署NAT网关实现业务ECS统一公网出口，通过SLB负载均衡实现多节点Web服务高可用，在内网隔离环境下部署RDS数据库，保障数据安全。
 - 完整落地LNMP+WordPress动态网站业务，配置全维度云监控告警体系，同时规范GitHub仓库结构、沉淀全套实操文档与部署脚本，实现项目可复现、可落地、可面试讲解。
 
-**核心关键词**：VPC架构设计、云上网络安全、ALB高可用、NAT网关、内网隔离、云运维、项目工程化
+**核心关键词**：VPC架构设计、云上网络安全、SLB高可用、NAT网关、内网隔离、云运维、项目工程化
