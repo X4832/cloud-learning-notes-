@@ -95,6 +95,7 @@ flowchart LR
         ECS2 --> NAT
     end
 ```
+---
 
 ## 🖼️ 架构图
 ```mermaid
@@ -120,6 +121,8 @@ flowchart LR
     RDS --> OSS[阿里云OSS<br/>数据库定时备份归档]
     ECS1 & ECS2 --> NAT
     MONITOR[云监控] -.-> ECS1 & ECS2 & RDS
+    end
+```
 
 ---
 
