@@ -98,6 +98,7 @@ flowchart LR
 ---
 
 ## 🖼️ 架构图
+
 ```mermaid
 flowchart LR
     User[互联网用户] --> DNS[阿里云云解析DNS]
@@ -123,7 +124,6 @@ flowchart LR
     MONITOR[云监控] -.-> ECS1 & ECS2 & RDS
     end
 ```
-
 ---
 
 ## 核心项目亮点
