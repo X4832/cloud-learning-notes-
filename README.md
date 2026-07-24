@@ -68,37 +68,7 @@ VPC、子网、安全组、网络ACL、ECS、SLB负载均衡、RDS MariaDB、OSS
 - **Web业务子网**：部署多台 ECS 业务节点，承载网站服务
 - **数据库子网**：纯内网隔离 RDS，无任何公网暴露，保障数据安全
 
-### 架构流程图（简化版）
-
-```mermaid
-flowchart LR
-    Client{公网用户} --> SLB[SLB负载均衡]
-
-    subgraph VPC["阿里云企业VPC 10.0.0.0/16"]
-        subgraph Pub["公共子网 10.0.1.0/24"]
-            SLB
-            NAT["NAT网关 SNAT公网出口"]
-        end
-
-        subgraph Web["Web业务子网 10.0.2.0/24"]
-            ECS1["ECS Web节点1 LNMP"]
-            ECS2["ECS Web节点2 LNMP"]
-        end
-
-        subgraph DB["数据库子网 10.0.3.0/24"]
-            RDS[("RDS MariaDB")]
-        end
-    end
-
-    SLB --> ECS1
-    SLB --> ECS2
-    ECS1 --> RDS
-    ECS2 --> RDS
-    ECS1 --> NAT
-    ECS2 --> NAT
-```
-
-### 架构流程图（完整版）
+### 架构流程图
 
 ```mermaid
 flowchart LR
